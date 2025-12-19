@@ -13,7 +13,7 @@ TITLE_KEYS_JOURNAL  = "NAPLÓ BILLENTYŰK"
 KEYS_GENERAL = {
         " Space ": "Váltás a naptár és napló között",
         "   /   ": "Képernyő felosztás be-/kikapcsolása",
-        "   *   ": "Globális adatvédelmi mód be-/kikapcsolása",
+        "   *   ": "Adatvédelmi mód be-/kikapcsolása",
         "   ?   ": "Súgó megjelenítése",
         "   Q   ": "Újratöltés",
         "   q   ": "Kilépés",
