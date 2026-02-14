@@ -1,98 +1,176 @@
-# Calcure
+calcure-RE-sonarqube
+
+Software Re-Engineering
+Date: 14th February 2026
+
+Written by:
+ Anna Zubair
+ Muhammad Basim 
+
+## Project Overview
+
+This project demonstrates the containerization and static code analysis of Calcure — a modern TUI (Terminal User Interface) calendar and task manager.
+
+- Repository: https://github.com/anufrievroman/calcure
+- Language: Python
+- License: MIT
+
+### Description: 
+A minimal, customizable terminal-based calendar and task manager supporting cloud-synced .ics files, todo lists with subtasks, Persian calendar support, weather display, and Vim-style navigation.
+
+## Docker Execution Steps
+
+This section explains how the Calcure application was containerized and executed using Docker.
+
+# 1️⃣ Create a Dockerfile
+
+Create a file named Dockerfile in the root directory with the following content:
+
+# Use python runtime
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy project files
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir .
+
+# Create config directory manually
+RUN mkdir -p /root/.config/calcure
+
+# Run the application
+CMD ["python", "-m", "calcure"]
+
+### Why These Steps?
+
+FROM python:3.9-slim → Lightweight base image with Python pre-installed.
+
+WORKDIR /app → Sets working directory inside container.
+
+COPY . /app → Copies project files into container.
+
+RUN pip install --no-cache-dir . → Installs project dependencies.
+
+CMD → Runs Calcure when container starts.
+
+### 2️⃣ Build the Docker Image
+
+Run the following command in the project directory:
+
+docker build -t calcure-assignment .
 
 
-Modern TUI calendar and task manager with customizable interface. Manages your events and tasks, displays birthdays from your [abook](https://abook.sourceforge.io/), and can import events and tasks from [calcurse](https://github.com/lfos/calcurse).
+This compiles the Dockerfile into a reusable image.
 
-[See documentation](https://anufrievroman.gitbook.io/calcure/) for more information.
-
-![screenshot](screenshot.png)
-
-## Features
-
-- Vim keys
-- View tasks and events from .ics files synced with clouds
-- Operation with fewest key presses possible
-- Todo list with subtasks, deadlines, and timers
-- Birthdays of your abook contacts
-- Import of events and tasks from calcurse
-- Icons according to the name ✈ ⛷ ⛱
-- Private events and tasks •••••
-- Plain text database in your folder for cloud sync
-- Customizable colors, icons, and other features
-- Resize and mobile friendly
-- Current weather ⛅
-- Support for [Persian calendar](https://en.wikipedia.org/wiki/Iranian_calendars)
+### 3️⃣ Run the Container
+docker run -it --rm calcure-assignment
 
 
-## Installation
+-it → Interactive terminal mode
 
-### Linux and Mac OS
+--rm → Automatically removes container after exit
 
-There are several ways to install:
+If successful, Calcure launches inside the container.
 
-`pipx install calcure` - the up-to-date version from PyPi. You may need to install `pipx` first.
+## SonarQube Analysis Steps
 
-`yay -S calcure` - [AUR package](https://aur.archlinux.org/packages/calcure) is available. Upvote to support the project!
+Static code analysis was performed using SonarQube deployed via Docker.
 
-`calcure` is also available as NixOS package.
+### 1️⃣ Deploy SonarQube Server
 
-### Windows
+Pull and run the official image:
 
-1. Install [Windows Terminal](https://apps.microsoft.com/detail/9n0dx20hk701?hl=en-US&gl=US) app from the Microsoft Store.
-2. Install [Python 3.x](https://apps.microsoft.com/search/publisher?name=Python+Software+Foundation&hl=en-us&gl=US) also from the Microsoft Store (if you just type `python` in the Windows Terminal app it will offer you to install)
-3. Install the program and libraries by typing in the Windows Terminal `pip install windows-curses calcure`
-4. Now you can finally run it by typing in the Windows Terminal `python -m calcure`
+docker run -d --name sonarqube -p 9000:9000 sonarqube:community
 
-### Upgrade to the most recent version
+Explanation:
 
-`pipx upgrade calcure`
+-d → Detached mode
 
-### Dependencies
+-p 9000:9000 → Maps container port to localhost
 
-- `python` 3.10 and higher (usually already installed)
-- `holidays`, `jdatetime`, and `icalendar` python libraries (should be installed automatically with the calcure).
-- `windows-curses` on Windows
+Access dashboard at:
 
-## Usage
-
-Run `calcure` in your terminal. You may need to restart your terminal after the install.
-
-### Syncing with cloud calendars
-
-[This page in documentation](https://anufrievroman.gitbook.io/calcure/syncing-with-clouds) shows examples how to sync and display in read-only mode events and tasks from Nextcloud, Google, and other calendars.
-
-### User arguments
-
-[Various user arguments](https://anufrievroman.gitbook.io/calcure/user-arguments) can be added started in special mods add tasks and events etc.
-
-### Key bindings
-
-[List of all key bindings](https://anufrievroman.gitbook.io/calcure/key-bindings) can be accessed in the wiki and via `?` key in the program.
-
-### Settings
-
-[Example of config.ini file](https://anufrievroman.gitbook.io/calcure/default-config) and [explanations of all settings](https://anufrievroman.gitbook.io/calcure/settings) are available in the documentation.
-On the first run, program will create a `config.ini` file where you can edit parameters, colors, and icons at `~/.config/calcure/config.ini`.
-
-### Setting daily reminders
-
-You can try [this project](https://github.com/sponkurtus2/calcxporte_r) to recieve daily reminders of events in your Calcure.
-
-### Troubleshooting
-
-[Typical problems and solutions](https://anufrievroman.gitbook.io/calcure/troubleshooting) are described in documentation. If you faced a new problem, don't hesitate to open an issue.
+http://localhost:9000
 
 
-## Contribution
+Login with:
 
-[Full information about contribution](https://anufrievroman.gitbook.io/calcure/contribution) is available in the documentation.
+Username: admin
+Password: admin
 
-## Support
 
-I am not a professional developer and work on open-source projects in my free time. If you'd like to support the development, consider donations via [buymeacoffee](https://www.buymeacoffee.com/angryprofessor) or cryptocurrencies:
+Update the password when prompted.
 
-- BTC `bc1qpkzmutdqfxkce34skt09vll97s5smpa0r2tyzj`
-- ETH `0x6f1Ce9cA181458Fc153a5f7cBF88044736C3b00C`
-- BNB `0x40f22c372758E35C905458cAF8BB17f51ac133d1`
-- LTC `ltc1qtu33qyv2xlzxda5mmrmk943zpksq8q75tuh85p`
-- XMR `4AHRhpNYUZcPVN78rbUWAzBuvMKQdpwStS5L3kjunnBMWWW2pjYBko1RUF6nQVpgQPdfAkM3jrEWrWKDHz1h4Ucd4gFCZ9j`
+### 2️⃣ Create a New Project
+
+Inside the SonarQube dashboard:
+
+Project Name: re1
+
+Project Key: re1
+
+Branch: Main
+
+### 3️⃣ Generate Authentication Token
+
+Generate an analysis token from:
+
+My Account → Security → Generate Token
+
+
+This token allows the scanner to securely communicate with the server.
+
+### 4️⃣ Run SonarScanner via Docker
+
+Instead of installing SonarScanner locally, run it as a container:
+
+docker run --rm \
+    -v "$(pwd):/usr/src" \
+    sonarsource/sonar-scanner-cli \
+    -Dsonar.projectKey=re1 \
+    -Dsonar.sources=. \
+    -Dsonar.host.url=http://host.docker.internal:9000 \
+    -Dsonar.token=YOUR_GENERATED_TOKEN
+
+Configuration Parameters
+
+-Dsonar.projectKey=re1 → Links scan to created project
+
+-Dsonar.sources=. → Analyzes current directory
+
+-Dsonar.host.url → Points scanner to local server
+
+-Dsonar.token → Authenticates scan
+
+After execution, results appear on the SonarQube dashboard.
+
+## 📊 Analysis Summary
+
+The static analysis of Calcure revealed:
+
+- Total Code Smells: 84
+- High Cognitive Complexity in multiple files
+- Wildcard Imports (from module import *)
+- PEP-8 Convention Violations
+- Code Duplication: 1.8%
+- Maintainability Rating: A
+
+Most Critical Issues
+
+- Extremely complex functions (Cognitive Complexity scores up to 139)
+- Namespace pollution due to wildcard imports
+- String slicing instead of .startswith()
+
+## Conclusion
+
+The containerization of Calcure ensured a reproducible and isolated deployment environment. Deploying SonarQube via Docker enabled efficient static code analysis without local installation complexity.
+
+Key takeaways:
+
+- Docker simplifies environment consistency
+- SonarQube quantifies technical debt
+- CI/CD integration can prevent maintainability degradation
+- Refactoring high-complexity functions will significantly improve long-term sustainability
